@@ -1,4 +1,4 @@
-package com.demoauthapi.demoauthapi.scurity;
+package com.demoauthapi.demoauthapi.scurity.filter;
 
 import java.io.IOException;
 import javax.servlet.FilterChain;
@@ -22,6 +22,6 @@ public class JWTAuthenticationFilter extends GenericFilterBean {
             var token = StringUtils.substringAfter(header, "Bearer ");
             System.out.println("token: " + token);
         }
-
+        chain.doFilter(request, response);
     }
 }
