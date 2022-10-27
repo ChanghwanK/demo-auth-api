@@ -1,23 +1,23 @@
 package com.demoauthapi.demoauthapi.scurity.config;
 
-import com.demoauthapi.demoauthapi.scurity.CustomEntryPoint;
+import com.demoauthapi.demoauthapi.scurity.exeption.CustomAccessDeniedHandler;
+import com.demoauthapi.demoauthapi.scurity.exeption.CustomEntryPoint;
 import com.demoauthapi.demoauthapi.scurity.filter.JWTAuthenticationFilter;
 import com.demoauthapi.demoauthapi.scurity.filter.JwtLoginFilter;
-import org.springframework.context.annotation.Bean;
+import com.demoauthapi.demoauthapi.service.CustomUserDetailService;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+    private final CustomUserDetailService customUserDetailService;
+
+    public SecurityConfig(CustomUserDetailService customUserDetailService) {
+        this.customUserDetailService = customUserDetailService;
     }
 
     @Override
@@ -31,8 +31,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .anyRequest().authenticated()
             .and()
             .addFilterAt(new JwtLoginFilter(authenticationManager()), UsernamePasswordAuthenticationFilter.class)
-            .addFilterBefore(new JWTAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
-            .exceptionHandling().authenticationEntryPoint(new CustomEntryPoint());
+            .addFilterAt(new JWTAuthenticationFilter(authenticationManager(), customUserDetailService), UsernamePasswordAuthenticationFilter.class)
+            .exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler()).authenticationEntryPoint(new CustomEntryPoint());
     }
 
 }

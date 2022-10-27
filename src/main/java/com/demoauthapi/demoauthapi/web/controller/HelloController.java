@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class HelloController {
 
-    @GetMapping("/hello")
+    @GetMapping("/api/hello")
     public HashMap<String, String> hello() {
         HashMap<String, String> map = new HashMap<>();
         map.put("message", "Hello World!");

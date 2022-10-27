@@ -1,4 +1,4 @@
-package com.demoauthapi.demoauthapi.scurity;
+package com.demoauthapi.demoauthapi.scurity.exeption;
 
 import com.demoauthapi.demoauthapi.web.controller.dto.login.response.UnAuthorizeResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,9 +19,10 @@ public class CustomEntryPoint implements AuthenticationEntryPoint {
     public void commence(
         HttpServletRequest request,
         HttpServletResponse response,
-        AuthenticationException authException) throws IOException, ServletException {
+        AuthenticationException authException
+    ) throws IOException, ServletException {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
-        objectMapper.writeValue(response.getOutputStream(), new UnAuthorizeResponse());
+        objectMapper.writeValue(response.getOutputStream(), new UnAuthorizeResponse("Invalid Token"));
     }
 }

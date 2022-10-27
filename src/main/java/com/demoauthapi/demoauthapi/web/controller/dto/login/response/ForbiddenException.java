@@ -3,10 +3,10 @@ package com.demoauthapi.demoauthapi.web.controller.dto.login.response;
 import lombok.Getter;
 
 @Getter
-public class UnAuthorizeResponse {
+public class ForbiddenException {
     private final String message;
 
-    public UnAuthorizeResponse(String message) {
-        this.message = message;
+    public ForbiddenException() {
+        this.message = "Forbidden Request";
     }
 }
