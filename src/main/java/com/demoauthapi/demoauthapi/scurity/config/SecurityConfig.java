@@ -30,7 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/login", "/api/sign-up").permitAll()
             .anyRequest().authenticated()
             .and()
-            .addFilterAt(new JwtLoginFilter(authenticationManager()), UsernamePasswordAuthenticationFilter.class)
+            .addFilterAt(new JwtLoginFilter(authenticationManager(), customUserDetailService), UsernamePasswordAuthenticationFilter.class)
             .addFilterAt(new JWTAuthenticationFilter(authenticationManager(), customUserDetailService), UsernamePasswordAuthenticationFilter.class)
             .exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler()).authenticationEntryPoint(new CustomEntryPoint());
     }

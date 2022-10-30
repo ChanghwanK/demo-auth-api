@@ -5,6 +5,7 @@ import com.demoauthapi.demoauthapi.entity.UserDetailsImpl;
 import com.demoauthapi.demoauthapi.repsoitory.AuthRepository;
 import com.demoauthapi.demoauthapi.web.controller.dto.login.request.SignUpDto;
 import com.demoauthapi.demoauthapi.web.controller.dto.login.response.SignUpResult;
+import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -30,5 +31,18 @@ public class CustomUserDetailService implements UserDetailsService {
         Member member = signUpDto.toEntity(encodedPassword);
         authRepository.save(member);
         return SignUpResult.of(member.getNickName(), member.getSignUpDate());
+    }
+
+    @Transactional
+    public void setRefreshToken(String refreshToken, String nickName) {
+        Member member = authRepository.findByNickName(nickName)
+            .orElseThrow(() -> new UsernameNotFoundException("존재하지 않는 유저입니다."));
+        member.setRefreshToken(refreshToken);
+    }
+
+    public String getRefreshToken(String username) {
+        Member member = authRepository.findByNickName(username)
+            .orElseThrow(() -> new UsernameNotFoundException("존재하지 않는 유저입니다."));
+        return member.getRefreshToken();
     }
 }

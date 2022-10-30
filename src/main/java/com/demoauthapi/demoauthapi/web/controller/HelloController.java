@@ -1,6 +1,7 @@
 package com.demoauthapi.demoauthapi.web.controller;
 
-import java.util.HashMap;
+import com.demoauthapi.demoauthapi.web.controller.dto.HelloDto;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -8,9 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class HelloController {
 
     @GetMapping("/api/hello")
-    public HashMap<String, String> hello() {
-        HashMap<String, String> map = new HashMap<>();
-        map.put("message", "Hello World!");
-        return map;
+    public ResponseEntity<HelloDto> hello() {
+        return ResponseEntity.ok(new HelloDto());
     }
 }

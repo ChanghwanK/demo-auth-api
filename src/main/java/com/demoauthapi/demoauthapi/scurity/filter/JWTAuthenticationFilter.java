@@ -47,6 +47,8 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter {
             );
             SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
             chain.doFilter(request, response);
+        } else if(verifyResult.getMessage() == "Token is expired") {
+            customUserDetailService.getRefreshToken(verifyResult.getUsername());
         } else {
             logger.error(verifyResult.getMessage());
         }
